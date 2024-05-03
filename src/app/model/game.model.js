@@ -1,4 +1,4 @@
-const db = require('../config/db');
+const db = require('../config/db/db');
 const Game = (games) => {
     this.id = games.id;
     this.name = games.name;
@@ -13,6 +13,7 @@ Game.get_all = (result) => {
         }
     });
 };
+module.exports = Game;
 // Game.get_all = (result) => {
 //     let data = [
 //         {"id":1,"name":"Titanfall 2"},
