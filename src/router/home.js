@@ -3,7 +3,6 @@ const siteRouter = require('./site');
 
 function route(app) {
     app.use('/games', gamesRouter);
-
     app.use('/', siteRouter);
 }
 module.exports = route;

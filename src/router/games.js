@@ -4,7 +4,6 @@ const router = express.Router();
 const gameController = require('../app/controller/games.controller');
 
 router.use('/:slug', gameController.show);
-router.use('/', gameController.games);
 
 module.exports = router;
 
