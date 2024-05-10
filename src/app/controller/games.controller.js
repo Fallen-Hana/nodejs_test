@@ -2,7 +2,8 @@ const Game = require('../model/game.model');
 class GamesController {
     show = (req, res) => {
         Game.get_one(req.params.slug, (result) => {
-            res.send(result);
+            res.render('detail/show', { result: result });
+            // res.send(result)
         });
     };
 }

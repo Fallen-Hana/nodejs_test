@@ -1,26 +1,20 @@
 <div class='mt-4'>
     <div class='row'>
-
         {{#each data}}
             <div class='col-sm-6 col-lg-4'>
                 <div class='list-game'>
-                    <a href='/games/{{this.slug}}'>
-                        <img
-                            src='{{this.image}}'
-                            class='card-img-top'
-                            alt='{{this.image}}'
-                        />
+                    <a href='/games/{{slug}}'>
+                        <img src='{{image}}' class='card-img-top' alt='{{image}}'/>
                     </a>
                     <div class='card-body'>
-                        <a href='/games/{{this.slug}}'>
-                            <h5 class='card-title'>{{this.name}}</h5>
+                        <a href='/games/{{slug}}'>
+                            <h5 class='card-title'>{{name}}</h5>
                         </a>
-                        <p class='card-text'>{{this.des}}</p>
-                        <a href='#' class='btn btn-primary'>{{this.id}}</a>
+                        <p class='card-text'>{{des}}</p>
+                        <a href='#' class='btn btn-primary'>{{id}}</a>
                     </div>
                 </div>
             </div>
         {{/each}}
-
     </div>
 </div>

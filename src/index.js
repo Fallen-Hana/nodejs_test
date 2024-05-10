@@ -22,9 +22,7 @@ app.set('views', './src/resource/views');
 // require('./router/home')(app);
 // require('./router/games')(app);
 
-require('http')
-    .createServer(app)
-    .listen(process.env.HTTP_PORT || 3000, () => {
+require('http').createServer(app).listen(process.env.HTTP_PORT || 3000, () => {
         console.log(
             `Server http chạy ở http://localhost:${
                 process.env.HTTP_PORT || 3000

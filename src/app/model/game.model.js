@@ -10,7 +10,7 @@ class Game {
                 if (err || detail.length === 0) {
                     result(null);
                 } else {
-                    result(detail);
+                    result(detail[0]);
                 }
             }
         );
