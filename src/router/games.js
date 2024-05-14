@@ -3,6 +3,8 @@ const router = express.Router();
 
 const gameController = require('../app/controller/games.controller');
 
+router.use('/create', gameController.create);
+router.use('/store', gameController.store);
 router.use('/:slug', gameController.show);
 
 module.exports = router;

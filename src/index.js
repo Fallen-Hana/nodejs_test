@@ -5,6 +5,11 @@ const port = 3000;
 const { engine } = require('express-handlebars');
 const route = require('./router/home');
 
+console.log(1);
+setTimeout(console.log(2), 3000);
+console.log(3);
+
+app.use(express.json());
 route(app);
 app.use(express.static('./src/public'));
 app.use(morgan('combined'));
