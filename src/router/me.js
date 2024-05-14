@@ -1,13 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const meController = require('../app/controller/me.controller');
 
-const gameController = require('../app/controller/games.controller');
-
-router.use('/create', gameController.create);
-router.use('/store', gameController.store);
-router.use('/:id/edit', gameController.edit);
-router.use('/:id', gameController.update);
-router.use('/:slug', gameController.show);
+router.use('/stored/gamelist', meController.storedList);
 
 module.exports = router;
 

@@ -1,20 +1,56 @@
 const Game = require('../model/game.model');
+const generateSlug = require('./datacontrol');
+
 class GamesController {
     show = (req, res) => {
         Game.get_one(req.params.slug, (result) => {
-            res.render('detail/show', { result: result });
+            res.status(200).render('detail/show', { result: result });
             // res.send(result)
         });
     };
+
     create = (req, res) => {
         res.render('detail/create');
     };
+
     store = (req, res) => {
-        const x = req.body;
-        res.json(x);
+        const formData = req.body;
+        const dataName = formData.name;
+        formData.slug = generateSlug(dataName);
+        Game.insert(formData, (result) => {
+            if (result) {
+                res.redirect('/');
+            } else {
+                res.status(500).json({ message: 'Error adding game' });
+            }
+        });
+    };
+
+    edit = (req, res) => {
+        Game.get_one(req.params.id, (result) => {
+            res.status(200).render('detail/edit', { result: result });
+        });
+    };
+
+    update = (req, res) => {
+        const formData = req.body;
+        const dataId = req.params.id;
+        Game.update(dataId , formData, (result) => {
+            if (result) {
+                res.redirect('/me/stored/gamelist');
+            } else {
+                res.status(500).json({ message: 'Error updating game' });
+            }
+        });
     };
 }
 module.exports = new GamesController();
+
+
+
+
+
+
 // const Game = require('../model/game.model')
 // exports.get_list = (req, res) => {
 //     Game.get_all((data)=>{

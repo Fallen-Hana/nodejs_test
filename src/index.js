@@ -1,19 +1,24 @@
 const express = require('express');
 const morgan = require('morgan');
 const app = express();
-const port = 3000;
+var methodOverride = require('method-override')
 const { engine } = require('express-handlebars');
 const route = require('./router/home');
 
 app.use(express.json());
 app.use(express.static('./src/public'));
-app.use(morgan('combined'));
+// app.use(morgan('combined'));
 app.use(express.urlencoded({extended: true,}));
 
-app.engine('.hbs', engine({ extname: '.hbs' }));
+app.engine('.hbs', engine({ 
+    extname: '.hbs',
+    helpers: {
+        sum:(a,b) => a + b,
+    }
+}));
 app.set('view engine', '.hbs');
 app.set('views', './src/resource/views');
-
+app.use(methodOverride('_method'));
 // require('./router/home')(app);
 // require('./router/games')(app);
 

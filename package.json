@@ -4,8 +4,8 @@
     "description": "test 1",
     "main": "src/index.js",
     "scripts": {
-        "watch": "sass --watch src/resource/scss/app.scss src/public/css/app.css",
         "start": "nodemon src/index.js",
+        "watch": "sass --watch src/resource/scss/app.scss src/public/css/app.css",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
@@ -26,6 +26,7 @@
         "@nestjs/core": "^10.3.7",
         "express": "^4.19.2",
         "express-handlebars": "^7.1.2",
+        "method-override": "^3.0.0",
         "morgan": "^1.10.0",
         "mysql": "^2.18.1",
         "nodemon": "^3.1.0",
