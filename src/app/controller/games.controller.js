@@ -6,6 +6,13 @@ class GamesController {
             // res.send(result)
         });
     };
+    create = (req, res) => {
+        res.render('detail/create');
+    };
+    store = (req, res) => {
+        const x = req.body;
+        res.json(x);
+    };
 }
 module.exports = new GamesController();
 // const Game = require('../model/game.model')

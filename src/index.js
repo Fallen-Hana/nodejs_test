@@ -5,15 +5,10 @@ const port = 3000;
 const { engine } = require('express-handlebars');
 const route = require('./router/home');
 
-route(app);
+app.use(express.json());
 app.use(express.static('./src/public'));
 app.use(morgan('combined'));
-app.use(
-    express.urlencoded({
-        extended: true,
-    })
-);
-app.use(express.json());
+app.use(express.urlencoded({extended: true,}));
 
 app.engine('.hbs', engine({ extname: '.hbs' }));
 app.set('view engine', '.hbs');
@@ -21,6 +16,8 @@ app.set('views', './src/resource/views');
 
 // require('./router/home')(app);
 // require('./router/games')(app);
+
+route(app);
 
 require('http').createServer(app).listen(process.env.HTTP_PORT || 3000, () => {
         console.log(

@@ -4,9 +4,7 @@ class Game {
     constructor() {}
 
     get_one(slug, result) {
-        db.query(
-            'SELECT * FROM game_list WHERE slug = "' + slug + '"',
-            (err, detail) => {
+        db.query('SELECT * FROM game_list WHERE slug = "' + slug + '"', (err, detail) => {
                 if (err || detail.length === 0) {
                     result(null);
                 } else {
