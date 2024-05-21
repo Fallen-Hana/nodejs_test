@@ -1,9 +1,22 @@
 <div class="mt-4">
     <h3>My game list</h3>
+      <div class="mt-4 d-flex align-items-center">
+      <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
+          <label class="form-check-label" for="checkbox-all">
+              Select all
+          </label>
+      </div>
+      <select class="form-control form-control-sm checkbox-select-all-options" id="">
+          <option value="">---Choose smth---</option>
+          <option value="delete">Del</option>
+      </select>
+      <button class="btn btn-primary btn-sm disabled">DO IT</button>
+      </div>
     <table class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
+      <th scope="col" colspan="2">#</th>
       <th scope="col">Name</th>
       <th scope="col" width="40%">Description</th>
       <th scope="col" style="width:40%; height:40%;" colspan="2">Image</th>
@@ -12,16 +25,82 @@
   <tbody>
     {{#each data}}
     <tr>
+      <td>
+      <div class="form-check">
+          <input class="form-check-input" name="gameIds[]" type="checkbox" value="{{this.id}}">
+      </div>
+      </td>
       <th scope="row">{{sum @index 1}}</th>
       <td>{{this.name}}</td>
       <td>{{this.des}}</td>
       <td><img src="{{this.image}}" alt=""></td>
       <td>
         <a href="/games/{{this.id}}/edit" class="btn btn-dark">Edit</a>
-        <a href="" class="btn btn-info">Delete</a>
+        <a href="" class="btn btn-info" data-id="{{this.id}}" data-toggle="modal" data-target="#delete-game">Delete</a>
       </td>
+    </tr>
+    {{else}}
+    <tr>
+      <td colspan="5" class="text-center">There's nothing here</td>
+      <a href="/games/create">Add new things here:</a>
     </tr>
     {{/each}}
   </tbody>
 </table>
 </div>
+
+{{!-- delete confirm --}}
+<div class="modal" tabindex="-1" id="delete-game">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete game?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>U sure?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btn-delete" class="btn btn-danger">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- Hidden delete form --}}
+<form method="POST" name="delete-form"></form>
+
+<script>
+  //run when library is loaded in RAM
+  document.addEventListener('DOMContentLoaded', function(){
+    var deleteForm = document.forms['delete-form'];
+    var btnDelete = document.getElementById('btn-delete');
+    var gameId;
+    var checkboxAll = document.getElementById('checkbox-all');
+    var checkboxList = document.querySelectorAll('input[name="gameIds[]"]');
+    
+      $('#delete-game').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      gameId = button.data('id');
+      });
+      btnDelete.onclick = function() {
+        alert('Deleted');
+        deleteForm.action = '/games/' + gameId + '?_method=DELETE';
+        deleteForm.submit();
+      };
+      checkboxAll.onchange = function() {
+      var isCheckedAll = this.checked;
+        checkboxList.forEach(function(checkbox) {
+          checkbox.checked = isCheckedAll;
+      });
+      };
+      checkboxList.onchange = function(){
+        var checkMatch = document.querySelectorAll('input[name="gameIds[]"]:checked');
+        var isChecked = this.length === checkMatch.length;
+        console.log(isChecked);
+      };
+  });
+</script>

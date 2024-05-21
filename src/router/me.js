@@ -3,6 +3,7 @@ const router = express.Router();
 const meController = require('../app/controller/me.controller');
 
 router.use('/stored/gamelist', meController.storedList);
+router.use('/trash/gamelist', meController.deletedList);
 
 module.exports = router;
 

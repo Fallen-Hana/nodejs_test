@@ -7,5 +7,10 @@ class MeController {
             // res.send({data: data})
         });
     };
-}
+    deletedList = (req, res) => {
+        Game.deleted((data) => {
+            res.render('me/deleted-list', { data: data });
+        });
+    };
+};
 module.exports = new MeController();

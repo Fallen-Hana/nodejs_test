@@ -1,0 +1,107 @@
+<div class="mt-4">
+    <h3>My deleted list</h3>
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col" width="40%">Description</th>
+      <th scope="col" style="width:40%; height:40%;" colspan="2">Image</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each data}}
+    <tr>
+      <th scope="row">{{sum @index 1}}</th>
+      <td>{{this.name}}</td>
+      <td>{{this.des}}</td>
+      <td><img src="{{this.image}}" alt=""></td>
+      <td>
+        <a href="" class="btn btn-dark" data-id="{{this.id}}" data-toggle="modal" data-target="#restore-game">Restore</a>
+        <a href="" class="btn btn-info" data-id="{{this.id}}" data-toggle="modal" data-target="#delete-game">Delete permanent</a>
+      </td>
+    </tr>
+    {{else}}
+    <tr>
+      <td colspan="5" class="text-center">There's nothing here</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+</div>
+
+{{!-- delete confirm --}}
+<div class="modal" tabindex="-1" id="delete-game">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete game?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>U sure?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btn-delete" class="btn btn-danger">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{{!-- restore confirm --}}
+<div class="modal" tabindex="-1" id="restore-game">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Restore game?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>U sure?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btn-restore" class="btn btn-danger">Restore</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- Hidden form --}}
+<form method="POST" name="delete-form"></form>
+<form method="POST" name="restore-form"></form>
+
+<script>
+  //run when library is loaded in RAM
+  document.addEventListener('DOMContentLoaded', function(){
+    var deleteForm = document.forms['delete-form'];
+    var restoreForm = document.forms['restore-form'];
+    var gameId;
+    var btnDelete = document.getElementById('btn-delete');
+    var restoreBtn = document.getElementById('btn-restore');
+
+      $('#delete-game').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      gameId = button.data('id')
+      });
+
+      btnDelete.onclick = function() {
+        deleteForm.action = '/games/' + gameId + '/force?_method=DELETE';
+        deleteForm.submit();
+      };
+
+      $('#restore-game').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      gameId = button.data('id');
+      });
+
+      restoreBtn.onclick = () => {
+        deleteForm.action = '/games/' + gameId + '/restore?_method=PATCH';
+        deleteForm.submit();
+      }
+  });
+</script>

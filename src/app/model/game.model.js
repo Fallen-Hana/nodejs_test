@@ -29,7 +29,8 @@ class Game {
     };
 
     get_all = (result) => {
-        db.query('SELECT * FROM game_list', (err, gameList) => {
+        const query = "SELECT * FROM game_list WHERE deleteAt IS NULL"
+        db.query(query, (err, gameList) => {
             if (err) {
                 result(null);
             } else {
@@ -38,9 +39,25 @@ class Game {
         });
     };
 
+    deleted = (result) => {
+        const query = "SELECT * FROM game_list WHERE deleteAt IS NOT NULL"
+        db.query(query, (err, gameList) => {
+            if (err) {
+                result(null);
+            } else {
+                result(gameList);
+            }
+        });
+    };
+
+
     insert = (formData, result) => {
         const checkQuery = 'SELECT * FROM game_list WHERE slug = ?';
-        db.query(checkQuery, formData.slug, (rows)=>{
+        db.query(checkQuery, formData.slug, (err, rows)=>{
+            if (err) {
+                console.error(err);
+                return result(null);
+            };
             if (rows.length === 0){
                 const insertQuery = 'INSERT INTO game_list SET ?';
                 db.query(insertQuery, formData, (err, add)=>{
@@ -70,7 +87,7 @@ class Game {
     //     });
     // };
     update = (id, formData, result) =>{
-        const setQueryString = Object.keys(formData).map(key => { return `${key} = ?`});
+        const setQueryString = Object.keys(formData).map((key) => { return `${key} = ?`});
         const setQueryParams = Object.values(formData);
         const query = `UPDATE game_list 
         SET ${setQueryString}
@@ -84,15 +101,40 @@ class Game {
             }
         });
     };
+
+    softDelete = (id, result) => {
+        const query = `UPDATE game_list SET deleteAt = NOW() WHERE id = ?`;
+        db.query (query, id, (err, deleteResult) =>{
+            if(err){
+                result(null);
+            }else{
+                console.log('Bản ghi đã được đánh dấu là đã xóa');
+                result(deleteResult);
+            }
+        });
+    };
+    delete = (id, result) => {
+        const query = `DELETE FROM game_list WHERE id = ?`;
+        db.query (query, id, (err, deleteResult) =>{
+            if(err){
+                result(null);
+            }else{
+                console.log('Dữ liệu đã xóa');
+                result(deleteResult);
+            }
+        });
+    };
+
+    restore = (id, result) => {
+        const query = `UPDATE game_list SET deleteAt = NULL WHERE id = ?`;
+        db.query (query, id, (err, restoreResult) =>{
+            if(err){
+                result(null);
+            }else{
+                console.log('Bản ghi đã được khôi phục');
+                result(restoreResult);
+            }
+        });
+    }
 }
 module.exports = new Game();
-
-// }
-// Game.getByID = (id) => {
-//     let data = {"id":id,"name":"Atomic Heart"}
-//     return data;
-// }
-// Game.create = (data, result) => {
-//     result(data);
-// }
-// module.exports = Game;

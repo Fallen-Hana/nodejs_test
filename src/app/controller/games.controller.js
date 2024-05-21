@@ -19,7 +19,7 @@ class GamesController {
         formData.slug = generateSlug(dataName);
         Game.insert(formData, (result) => {
             if (result) {
-                res.redirect('/');
+                res.redirect('/me/stored/gamelist');
             } else {
                 res.status(500).json({ message: 'Error adding game' });
             }
@@ -42,6 +42,37 @@ class GamesController {
                 res.status(500).json({ message: 'Error updating game' });
             }
         });
+    };
+
+    delete = (req, res) => {
+        const dataId = req.params.id;
+        Game.softDelete(dataId, (result)=>{
+            if(result){
+                res.redirect('back');
+            }else{
+                res.status(500).json({ message: 'Error' });
+            }
+        });
+    };
+    forceDelete = (req, res) => {
+        const dataId = req.params.id;
+        Game.delete(dataId, (result)=>{
+            if(result){
+                res.redirect('back');
+            }else{
+                res.status(500).json({ message: 'Error' });
+            }
+        });
+    };
+    restore = (req, res) => {
+        const dataId = req.params.id;
+        Game.restore(dataId, (result)=>{
+            if(result){
+                res.redirect('back');
+            }else{
+                res.status(500).json({ message: 'Error' });
+            }
+        });    
     };
 }
 module.exports = new GamesController();

@@ -3,11 +3,14 @@ const router = express.Router();
 
 const gameController = require('../app/controller/games.controller');
 
-router.use('/create', gameController.create);
-router.use('/store', gameController.store);
-router.use('/:id/edit', gameController.edit);
-router.use('/:id', gameController.update);
-router.use('/:slug', gameController.show);
+router.get('/create', gameController.create);
+router.post('/store', gameController.store);
+router.get('/:id/edit', gameController.edit);
+router.patch('/:id/restore', gameController.restore);
+router.put('/:id', gameController.update);
+router.delete('/:id/force', gameController.forceDelete);
+router.delete('/:id', gameController.delete);
+router.get('/:slug', gameController.show);
 
 module.exports = router;
 
