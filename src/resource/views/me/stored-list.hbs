@@ -97,10 +97,12 @@
           checkbox.checked = isCheckedAll;
       });
       };
-      checkboxList.onchange = function(){
+      checkboxList.forEach(checkbox => {
+        checkbox.onchange = () =>{
         var checkMatch = document.querySelectorAll('input[name="gameIds[]"]:checked');
-        var isChecked = this.length === checkMatch.length;
+        var isChecked = checkboxList.length === checkMatch.length;
         console.log(isChecked);
-      };
+        }
+      });
   });
 </script>
