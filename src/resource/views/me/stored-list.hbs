@@ -1,4 +1,4 @@
-<div class="mt-4">
+<form name="container-form" method="POST" class="mt-4" action="/games/form-actions">
     <h3>My game list</h3>
       <div class="mt-4 d-flex align-items-center">
       <div class="form-check">
@@ -7,11 +7,11 @@
               Select all
           </label>
       </div>
-      <select class="form-control form-control-sm checkbox-select-all-options" id="">
+      <select class="form-control form-control-sm checkbox-select-all-options" name="action" required>
           <option value="">---Choose smth---</option>
           <option value="delete">Del</option>
       </select>
-      <button class="btn btn-primary btn-sm disabled">DO IT</button>
+      <button class="btn btn-primary btn-sm check-all-submit" disabled>DO IT</button>
       </div>
     <table class="table">
   <thead>
@@ -47,7 +47,7 @@
     {{/each}}
   </tbody>
 </table>
-</div>
+</form>
 
 {{!-- delete confirm --}}
 <div class="modal" tabindex="-1" id="delete-game">
@@ -78,16 +78,18 @@
   document.addEventListener('DOMContentLoaded', function(){
     var deleteForm = document.forms['delete-form'];
     var btnDelete = document.getElementById('btn-delete');
+    var containerForm = document.forms['container-form'];
     var gameId;
     var checkboxAll = document.getElementById('checkbox-all');
     var checkboxList = document.querySelectorAll('input[name="gameIds[]"]');
+    {{!-- var checkAllSubmitBtn = document.getElementsByClassName('check-all-submit'); --}}
+    var checkAllSubmitBtn = document.querySelector('.check-all-submit');
     
       $('#delete-game').on('show.bs.modal', function (event) {
       var button = $(event.relatedTarget) // Button that triggered the modal
       gameId = button.data('id');
       });
       btnDelete.onclick = function() {
-        alert('Deleted');
         deleteForm.action = '/games/' + gameId + '?_method=DELETE';
         deleteForm.submit();
       };
@@ -95,14 +97,35 @@
       var isCheckedAll = this.checked;
         checkboxList.forEach(function(checkbox) {
           checkbox.checked = isCheckedAll;
+          lightCheckAllSubmitBtn();
       });
       };
       checkboxList.forEach(checkbox => {
         checkbox.onchange = () =>{
         var checkMatch = document.querySelectorAll('input[name="gameIds[]"]:checked');
         var isChecked = checkboxList.length === checkMatch.length;
-        console.log(isChecked);
+        checkboxAll.checked = isChecked;
+        lightCheckAllSubmitBtn();
+        } });
+        
+      function lightCheckAllSubmitBtn(){
+        var checkedCount = document.querySelectorAll('input[name="gameIds[]"]:checked').length;
+        if(checkedCount > 0) {
+          checkAllSubmitBtn.removeAttribute('disabled');
+        }else{
+          checkAllSubmitBtn.setAttribute('disabled','true');
+        };
+          
+          {{!-- for (const ele of checkAllSubmitBtn) {
+              ele.classList.remove(...)
+            } --}}
+        
+      };
+      {{!-- containerForm.addEventListener('submit', function(e){
+        var cant = checkAllSubmitBtn.classList.contains('disabled');
+        if(cant){
+          e.preventDefault();
         }
-      });
+      }); --}}
   });
 </script>

@@ -21,7 +21,7 @@ class GamesController {
             if (result) {
                 res.redirect('/me/stored/gamelist');
             } else {
-                res.status(500).json({ message: 'Error adding game' });
+                res.status(500).json({ message: 'Cant add this shiet' });
             }
         });
     };
@@ -73,6 +73,42 @@ class GamesController {
                 res.status(500).json({ message: 'Error' });
             }
         });    
+    };
+    formActions = (req,res) =>{
+        const action = req.body.action;
+        const dataIds = req.body.gameIds;
+        switch (action){
+            case 'delete':
+            Game.softDeleteMany(dataIds, (result) => {
+                if(result){
+                    res.redirect('back')
+                }else{
+                    res.status(500).json({message: 'Error'});
+                }
+            });
+            break;
+            case 'restore':
+                Game.restoreMany(dataIds, (result)=>{
+                    if(result){
+                        res.redirect('back');
+                    }else{
+                        res.status(500).json({ message: 'Error' });
+                    }
+                }); 
+            break;
+            case 'permanent':
+                Game.deleteMany(dataIds, (result)=>{
+                    if(result){
+                        res.redirect('back');
+                    }else{
+                        res.status(500).json({ message: 'Error' });
+                    }
+                }); 
+            break;
+        default:
+            res.status(500).json({message: 'Invalid action'});
+            break;
+        }
     };
 }
 module.exports = new GamesController();

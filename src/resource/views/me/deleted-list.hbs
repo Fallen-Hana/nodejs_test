@@ -1,9 +1,24 @@
-<div class="mt-4">
+{{!-- main page --}}
+<form name="container-form" method="POST" class="mt-4" action="/games/form-actions">
     <h3>My deleted list</h3>
+    <div class="mt-4 d-flex align-items-center">
+      <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
+          <label class="form-check-label" for="checkbox-all">
+              Select all
+          </label>
+      </div>
+      <select class="form-control form-control-sm checkbox-select-all-options" name="action" required>
+          <option value="">---Choose smth---</option>
+          <option value="restore">Restore</option>
+          <option value="permanent">Permanent</option>
+      </select>
+      <button class="btn btn-primary btn-sm check-all-submit" disabled>JUST F*CKING DO IT</button>
+      </div>
     <table class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
+      <th scope="col" colspan="2">#</th>
       <th scope="col">Name</th>
       <th scope="col" width="40%">Description</th>
       <th scope="col" style="width:40%; height:40%;" colspan="2">Image</th>
@@ -12,6 +27,11 @@
   <tbody>
     {{#each data}}
     <tr>
+      <td>
+        <div class="form-check">
+          <input class="form-check-input" name="gameIds[]" type="checkbox" value="{{this.id}}">
+      </div>
+      </td>
       <th scope="row">{{sum @index 1}}</th>
       <td>{{this.name}}</td>
       <td>{{this.des}}</td>
@@ -28,7 +48,7 @@
     {{/each}}
   </tbody>
 </table>
-</div>
+</form>
 
 {{!-- delete confirm --}}
 <div class="modal" tabindex="-1" id="delete-game">
@@ -83,6 +103,9 @@
     var gameId;
     var btnDelete = document.getElementById('btn-delete');
     var restoreBtn = document.getElementById('btn-restore');
+    var checkboxAll = document.getElementById('checkbox-all');
+    var checkboxList = document.querySelectorAll('input[name="gameIds[]"]');
+    var checkAllSubmitBtn = document.querySelector('.check-all-submit');
 
       $('#delete-game').on('show.bs.modal', function (event) {
       var button = $(event.relatedTarget) // Button that triggered the modal
@@ -102,6 +125,31 @@
       restoreBtn.onclick = () => {
         deleteForm.action = '/games/' + gameId + '/restore?_method=PATCH';
         deleteForm.submit();
-      }
+            };
+
+      function lightCheckAllSubmitBtn(){
+        var checkedCount = document.querySelectorAll('input[name="gameIds[]"]:checked').length;
+        if(checkedCount > 0) {
+          checkAllSubmitBtn.removeAttribute('disabled');
+        }else{
+          checkAllSubmitBtn.setAttribute('disabled','true');
+        };
+            };
+            
+      checkboxAll.onchange = function() {
+      var isCheckedAll = checkboxAll.checked;
+        checkboxList.forEach(function(checkbox) {
+          checkbox.checked = isCheckedAll;
+          lightCheckAllSubmitBtn();
+      });
+            };
+
+      checkboxList.forEach(checkbox => {
+        checkbox.onchange = () =>{
+        var checkMatch = document.querySelectorAll('input[name="gameIds[]"]:checked');
+        var isChecked = checkboxList.length === checkMatch.length;
+        checkboxAll.checked = isChecked;
+        lightCheckAllSubmitBtn();
+        } });
   });
 </script>

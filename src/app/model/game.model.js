@@ -113,9 +113,31 @@ class Game {
             }
         });
     };
+    softDeleteMany = (ids, result) => {
+        const query = `UPDATE game_list SET deleteAt = NOW() WHERE id IN (?)`;
+        db.query (query, [ids], (err, deleteResult) =>{
+            if(err){
+                result(null);
+            }else{
+                console.log('Bản ghi đã được đánh dấu là đã xóa');
+                result(deleteResult);
+            }
+        });
+    };
     delete = (id, result) => {
         const query = `DELETE FROM game_list WHERE id = ?`;
         db.query (query, id, (err, deleteResult) =>{
+            if(err){
+                result(null);
+            }else{
+                console.log('Dữ liệu đã xóa');
+                result(deleteResult);
+            }
+        });
+    };
+    deleteMany = (ids, result) => {
+        const query = `DELETE FROM game_list WHERE id IN (?)`;
+        db.query (query, [ids], (err, deleteResult) =>{
             if(err){
                 result(null);
             }else{
@@ -128,6 +150,17 @@ class Game {
     restore = (id, result) => {
         const query = `UPDATE game_list SET deleteAt = NULL WHERE id = ?`;
         db.query (query, id, (err, restoreResult) =>{
+            if(err){
+                result(null);
+            }else{
+                console.log('Bản ghi đã được khôi phục');
+                result(restoreResult);
+            }
+        });
+    }
+    restoreMany = (ids, result) => {
+        const query = `UPDATE game_list SET deleteAt = NULL WHERE id IN (?)`;
+        db.query (query, [ids], (err, restoreResult) =>{
             if(err){
                 result(null);
             }else{

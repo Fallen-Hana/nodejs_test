@@ -7,6 +7,7 @@ router.get('/create', gameController.create);
 router.post('/store', gameController.store);
 router.get('/:id/edit', gameController.edit);
 router.patch('/:id/restore', gameController.restore);
+router.post('/form-actions', gameController.formActions);
 router.put('/:id', gameController.update);
 router.delete('/:id/force', gameController.forceDelete);
 router.delete('/:id', gameController.delete);
